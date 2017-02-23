@@ -48,8 +48,6 @@ class DefaultController extends Controller
 
         $articles = $repo->findOneById(22);
 
-        var_dump($articles);
-
-        return new Response();
+        return $this->render("article/articles.html.twig");
     }
 }
