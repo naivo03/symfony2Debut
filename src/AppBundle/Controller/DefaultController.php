@@ -46,8 +46,8 @@ class DefaultController extends Controller
     {
         $repo = $this->getDoctrine()->getRepository("AppBundle:Article");
 
-        $articles = $repo->findOneById(22);
+        $articles = $repo->findAll();
 
-        return $this->render("article/articles.html.twig");
+        return $this->render("article/articles.html.twig", array('articles' => $articles));
     }
 }

@@ -1,5 +1,9 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-	<p>LOL</p>
+	<h1>TOUS MES ARTICLES</h1>
+	{% for item in articles %}
+    	<h2>{{ item.title}}</h2>
+    	<p>{{ item.content}}</p>
+	{% endfor %}
 {% endblock %}
