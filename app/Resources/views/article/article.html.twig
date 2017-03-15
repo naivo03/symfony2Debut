@@ -5,15 +5,11 @@
 
                 		<div class="jumbotron" style="min-height: 100%; min-width: 100%">
 
-                        {% for item in articles %}
-
-                			 <h1>{{ item.title}}</h1> 
-                       			<p>{{ item.content}}</p> 
+                			 <h1>{{ article.title}}</h1> 
+                       			<p>{{ article.content}}</p> 
                 			 <a class="btn btn-lg btn-primary" href=# role="button">Lire plus &raquo;</a>
 
-                        {% endfor %}
-
-                    </div> 
+                    </div>
 
         </div>
 {% endblock %}

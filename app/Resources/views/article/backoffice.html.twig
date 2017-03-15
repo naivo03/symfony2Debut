@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+
+		<div class="container">
+		<div class="table-responsive">
+		  <table id="tabArticle" class="table table-striped" >
+		  	<thead>
+		  		<tr>
+		  			<th>ID</th>
+		  			<th>Title</th>
+		  			<th>Date</th>
+		  			<th>Actions</th>
+		  		</tr>
+		  	</thead>
+
+		  	<tbody>
+            {% for item in articles %}
+		  	  		<tr title="{{ item.id}}">
+		  			<td>{{ item.id}}</td>
+		  			<td>{{ item.title}}</td>
+		  			<td>{{ item.date|date("m/d/Y")}}</td>
+		  			<td>
+		  				<a type="button" class="btn btn-success" href=#>Modifier</a>
+		  				<a type="button" class="btn btn-danger" href="{{ path('remove', {'idArticle': item.id }) }}">Supprimer</a>
+		  			</td>
+		  		</tr>
+		  	{% endfor %}
+		  	</tbody>
+		  </table>
+		  <a type="button" class="btn btn-primary" href="create" >Ajouter un Article</a>
+		  </div>
+		  </div>
+
+
+
+{% endblock %}
