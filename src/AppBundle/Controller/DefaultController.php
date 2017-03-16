@@ -36,24 +36,53 @@ class DefaultController extends Controller
 
         $em->remove($product);
         $em->flush(); //execute la requete demande ici remove(product)
-        return new Response("suppression d'un article"); 
+        $repo = $this->getDoctrine()->getRepository("AppBundle:Article");
+        $articles = $repo->findAll();
+
+        return $this->render("article/backoffice.html.twig", ['articles' => $articles]);
     }
 
     /**
-     * @Route("/update", name="update")
+     * @Route("/update/{idArticle}", defaults={"idArticle" = 0}, name="update")
+     * @Method({"GET", "POST"})
+     * @Template()
      */
-    public function updateAction(Request $request)
+    public function updateAction(Request $request, $idArticle)
     {
-        
-        $formulaire = $this->createForm(CreateUpdateFormType::class);
-        $formulaire->handleRequest($request);
-
-        if($formulaire->isValid())
+        if ($idArticle > 0)
         {
-            dump($formulaire->getData());
+            $repo = $this->getDoctrine()->getRepository("AppBundle:Article");
+            $article = $repo->find($idArticle);
+
+            $formulaire = $this->createForm(CreateUpdateFormType::class, [
+                'title' => $article->getTitle(), 
+                'content' => $article->getContent()
+                ]);
+            $formulaire->handleRequest($request);
+
+            if($formulaire->isValid())
+            {
+                $data = $formulaire->getData();
+                /****ici on va travailler avec $article pr modifier l'article****/
+                
+                $em = $this->getDoctrine()->getManager();
+                $article->setTitle($data['title'])->setContent($data['content'])->setDate(new \Datetime());
+                $em->persist($article);
+                $em->flush();
+
+                /********/
+
+                $repo = $this->getDoctrine()->getRepository("AppBundle:Article");
+                $articles = $repo->findAll();
+
+                return $this->render("article/backoffice.html.twig", ['articles' => $articles]);
+
+            }
+
+            return $this->render('article/update.html.twig', ['formulaire' => $formulaire->createView()]);
         }
 
-        return $this->render('article/update.html.twig', ['formulaire' => $formulaire->createView()]);
+        return $this->articlesAction(); //tetourne a la page d'article si on a un mauvais ID
 
         /*$em = $this->getDoctrine()->getManager();
         $product = $em->getRepository('AppBundle:Article')->find(1);
@@ -69,19 +98,32 @@ class DefaultController extends Controller
     /**
      * @Route("/create", name="create")
      */
-    public function createAction()
+    public function createAction(Request $request)
     {
-        
+        $formulaire = $this->createForm(CreateUpdateFormType::class, [
+            'title' => 'titre ici', 
+            'content' => 'contenu ici'
+            ]);
+        $formulaire->handleRequest($request);
 
-        for ($i=0; $i < 10; $i++) { 
+        if($formulaire->isValid())
+        {
+            $data = $formulaire->getData();
+
             $article = new Article();
-            $article->setTitle("article ".rand(1, 1000))->setContent("bonjour 1er article")->setDate(new \Datetime())->setUserId(42);
+            $article->setTitle($data['title'])->setContent($data['content'])->setDate(new \Datetime())->setUserId(42);
             $em = $this->getDoctrine()->getManager();
             $em->persist($article);
             $em->flush();    
+
+            $repo = $this->getDoctrine()->getRepository("AppBundle:Article");
+            $articles = $repo->findAll();
+
+            return $this->render("article/backoffice.html.twig", ['articles' => $articles]);
+
         }
 
-        return new Response("creation d'articles dans database"); 
+        return $this->render('article/update.html.twig', ['formulaire' => $formulaire->createView()]);
     }
 
     /**
