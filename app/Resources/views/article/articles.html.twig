@@ -9,7 +9,7 @@
 
                 			 <h1>{{ item.title}}</h1> 
                        			<p>{{ item.content}}</p> 
-                			 <a class="btn btn-lg btn-primary" href=# role="button">Lire plus &raquo;</a>
+                			 <a class="btn btn-lg btn-primary" href="{{ path('article', {'idArticle': item.id }) }}" role="button">Lire plus &raquo;</a>
 
                         {% endfor %}
 

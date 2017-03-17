@@ -5,7 +5,20 @@
 
                 		<div class="jumbotron" style="min-height: 100%; min-width: 100%">
 
-                		{{form(formulaire)}}
+
+
+
+                		{{ form_start(formulaire, {'attr': {'class': 'form-horizontal'}}) }}
+                		   
+                		{# Les erreurs générales du formulaire. #}
+    					{{ form_errors(formulaire) }}
+
+    					{{ form_widget(formulaire.submit, {'attr': {'class': 'btn btn-primary'}}) }}
+
+    					{{ form_rest(formulaire) }}
+  
+  						{# Fermeture de la balise <form> du formulaire HTML #}
+  						{{ form_end(formulaire) }}
 
                     </div>
 
