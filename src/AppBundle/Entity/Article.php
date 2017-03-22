@@ -1,12 +1,9 @@
 <?php
-
 namespace AppBundle\Entity;
-
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
-
+use Symfony\Component\Validator\Constraints as Assert;
 /**
- * Article
+ * Article.
  *
  * @ORM\Table(name="article")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\ArticleRepository")
@@ -21,181 +18,170 @@ class Article
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-
-
-    /***********************one to many relations****************************************/
-
+    /**
+     * @ORM\Column(type="string")
+     *
+     * @Assert\NotBlank(message="Choisissez une image à associer à votre article")
+     * @Assert\File(mimeTypes={ "image/jpeg" })
+     */
+    private $image;
+    /**
+     * @return mixed
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
+    /**
+     * @param mixed $image
+     */
+    public function setImage($image)
+    {
+        $this->image = $image;
+        return $this;
+    }
+    /**
+     * @var string (plus de 10 caractère)
+     *
+     * @Assert\Length(
+     *      min = 10,
+     *      max = 250,
+     *      minMessage = "Votre Titre Doit comprendre au moins 10 caractères.",
+     *      maxMessage = "Votre Titre Doit comprendre au maximum 250 caractères."
+     * )
+     *
+     * @ORM\Column(name="title", type="string", length=255)
+     */
+    private $title;
+    /**
+     * @var string (au moins 18 caractères)
+     *
+     * @ORM\Column(name="content", type="text")
+     */
+    private $content;
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="date", type="datetime")
+     */
+    private $date;
     /**
      * @ORM\OneToMany(targetEntity="Comment", mappedBy="article", cascade={"remove"}, orphanRemoval=true)
      */
     private $comments;
 
-    public function __construct()
+    /**
+     * @return mixed
+     */
+    public function getCategory()
     {
-        $this->comments = new ArrayCollection();
+        return $this->category;
     }
-
     /**
-     * @var string
-     *
-     * @ORM\Column(name="title", type="string", length=255)
+     * @param mixed $category
      */
-    private $title;
-
+    public function setCategory($category)
+    {
+        $this->category = $category;
+    }
     /**
-     * @var string
-     *
-     * @ORM\Column(name="content", type="text")
+     * @return mixed
      */
-    private $content;
-
+    public function getArticle()
+    {
+        return $this->article;
+    }
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="date", type="datetimetz")
+     * @param mixed $article
      */
-    private $date;
-
+    public function setArticle($article)
+    {
+        $this->article = $article;
+    }
     /**
-     * @var string
-     *
-     * @ORM\Column(name="userId", type="integer")
+     * @return mixed
      */
-    private $userId;
-
-
+    public function getComments()
+    {
+        return $this->comments;
+    }
     /**
-     * Get id
+     * @param mixed $comments
+     */
+    public function setComments($comments)
+    {
+        $this->comments = $comments;
+    }
+    /**
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
         return $this->id;
     }
-
     /**
-     * Set title
+     * Set title.
      *
      * @param string $title
+     *
      * @return Article
      */
     public function setTitle($title)
     {
         $this->title = $title;
-
         return $this;
     }
-
     /**
-     * Get title
+     * Get title.
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
         return $this->title;
     }
-
     /**
-     * Set content
+     * Set content.
      *
      * @param string $content
+     *
      * @return Article
      */
     public function setContent($content)
     {
         $this->content = $content;
-
         return $this;
     }
-
     /**
-     * Get content
+     * Get content.
      *
-     * @return string 
+     * @return string
      */
     public function getContent()
     {
         return $this->content;
     }
-
     /**
-     * Set date
+     * Set date.
      *
      * @param \DateTime $date
+     *
      * @return Article
      */
     public function setDate($date)
     {
         $this->date = $date;
-
         return $this;
     }
-
     /**
-     * Get date
+     * Get date.
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDate()
     {
         return $this->date;
-    }
-
-    /**
-     * Set userId
-     *
-     * @param string $userId
-     * @return Article
-     */
-    public function setUserId($userId)
-    {
-        $this->userId = $userId;
-
-        return $this;
-    }
-
-    /**
-     * Get userId
-     *
-     * @return string 
-     */
-    public function getUserId()
-    {
-        return $this->userId;
-    }
-
-    /**
-     * Add comments
-     *
-     * @param \AppBundle\Entity\Comment $comments
-     * @return Article
-     */
-    public function addComment(\AppBundle\Entity\Comment $comments)
-    {
-        $this->comments[] = $comments;
-
-        return $this;
-    }
-
-    /**
-     * Remove comments
-     *
-     * @param \AppBundle\Entity\Comment $comments
-     */
-    public function removeComment(\AppBundle\Entity\Comment $comments)
-    {
-        $this->comments->removeElement($comments);
-    }
-
-    /**
-     * Get comments
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getComments()
-    {
-        return $this->comments;
     }
 }
